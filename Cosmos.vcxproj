@@ -18,6 +18,19 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Ambience.cpp" />
+    <ClCompile Include="src\Buffer.cpp" />
+    <ClCompile Include="src\Cosmos.cpp" />
+    <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\HUD.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Ambience.h" />
+    <ClInclude Include="src\Buffer.h" />
+    <ClInclude Include="src\Game.h" />
+    <ClInclude Include="src\HUD.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -88,6 +101,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\Users\steph\source\repos\Cosmos\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -138,19 +152,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="Ambience.cpp" />
-    <ClCompile Include="Buffer.cpp" />
-    <ClCompile Include="Cosmos.cpp" />
-    <ClCompile Include="Game.cpp" />
-    <ClCompile Include="HUD.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Ambience.h" />
-    <ClInclude Include="Buffer.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="HUD.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
