@@ -21,3 +21,4 @@ private:
 	int starIndex{};
 	int lastX{};
 };
+
