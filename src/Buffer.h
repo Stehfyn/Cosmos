@@ -1,9 +1,11 @@
 #pragma once
+#define _WIN32_WINNT 0x500
 #include "Windows.h"
 class Buffer
 {
 public:
 	Buffer(int pScreenWidth, int pScreenHeight);
+	void setWindow();
 	void edit(int x, int y, wchar_t c);
 	void update();
 	void del();
