@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Main_Menu.cpp" />
     <ClCompile Include="src\Ambience.cpp" />
     <ClCompile Include="src\Buffer.cpp" />
     <ClCompile Include="src\Cosmos.cpp" />
@@ -26,6 +27,7 @@
     <ClCompile Include="src\HUD.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Main_Menu.h" />
     <ClInclude Include="src\Ambience.h" />
     <ClInclude Include="src\Buffer.h" />
     <ClInclude Include="src\Game.h" />
