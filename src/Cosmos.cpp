@@ -1,17 +1,28 @@
 //Stephen Foster
 
+#include <iostream>
 #include <thread>
 #include <chrono>
 #include "Buffer.h"
 #include "Ambience.h"
 #include "Game.h"
 #include "HUD.h"
+#include "Main_Menu.h"
 
 #define TICK_RATE 16.67ms //60 fps
 using namespace std;
 
 int main()
 {
+	enum State
+	{
+		MAIN_MENU,
+		GAME,
+		PRACTICE,
+		SETTINGS,
+		QUIT
+	};
+
 	//init buffer
 	const int ScreenWidth{ 80 }, ScreenHeight{ 30 };
 
@@ -21,7 +32,21 @@ int main()
 	HUD hud{};
 	//buffer.setWindow();
 	int tickCounter{};
-	
+	int state = MAIN_MENU;
+	Main_Menu mm{};
+	while (state == MAIN_MENU)
+	{
+		auto start = std::chrono::high_resolution_clock::now();
+		mm.displayAmbience(tickCounter, buffer);
+		mm.displayTitle(buffer);
+		mm.displayModes(buffer);
+		buffer.update();
+		tickCounter++;
+		auto end = chrono::high_resolution_clock::now();
+		auto elapsed = chrono::duration_cast<chrono::microseconds>(start - end);
+		this_thread::sleep_for((TICK_RATE - elapsed) / 2);
+	}
+	tickCounter = 0;
 	//game loop
 	bool run = true;
 	while (run)
