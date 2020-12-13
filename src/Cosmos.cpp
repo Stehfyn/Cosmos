@@ -37,7 +37,7 @@ int main()
 		//get game logic input
 		//--game logic buffer
 		//compare and calculate next frame
-		if (tickCounter % 2 == 0)
+		if (tickCounter % 4 == 0)
 		{
 			ambience.addStar();
 			ambience.advanceStars(buffer);
@@ -65,10 +65,11 @@ int main()
 		game.printLaser(buffer);
 		game.printPlayer(buffer);
 		//update frame with next frame
-		game.addScore(1);
+		//game.addScore(1);
 		hud.displayScore(game.getScore(), buffer);
 		hud.displayEnemies(game.getRemaining(), buffer);
 		hud.displayAccuracy(game.calcAccuracy(), buffer);
+		hud.displayLine(buffer);
 		buffer.update();
 		tickCounter++;
 		auto end = chrono::high_resolution_clock::now();
