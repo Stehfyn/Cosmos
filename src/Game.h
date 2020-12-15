@@ -64,7 +64,7 @@ private:
 	int enemyIndex{};
 	int laserIndex{};
 
-	int bKey[4];
+	int input[4];
 	bool holdL{ false };
 	bool holdR{ false };
 	bool shootDelay{ false };

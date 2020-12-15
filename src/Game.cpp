@@ -1,32 +1,40 @@
 #include "Game.h"
 #include "Buffer.h"
 #include "Windows.h"
-void::Game::getInput(Buffer buffer, int tickCounter)
+
+#define CTRL input[0] 
+#define LEFT input[1]
+#define RIGHT input[2]
+#define SPACE input[3]
+
+void::Game::getInput(Buffer buffer, int tickCounter) //implicitly tracks tickCount
 {
+	//Obtain input from user for current tick
 	for (int k = 0; k < 4; k++)								// Ctrl L R S
-		bKey[k] = (0x8000 & GetAsyncKeyState((unsigned char)("\x11\x25\x27\x20"[k]))) != 0;
-	if (!bKey[1])
+		input[k] = (0x8000 & GetKeyState((unsigned char)("\x11\x25\x27\x20"[k]))) != 0;
+
+	//Clear delay flags
+	if (!input[1])
 		holdL = false;
-	if (!bKey[2])
+	if (!input[2])
 		holdR = false;
-	if (tickCounter - shootTick == 5)
-		shootDelay = false;
-	if (bKey[0])
+
+	if (CTRL)
 	{
-		if (bKey[1] && !holdL && player.xPos != 0)
+		if (LEFT && !holdL && player.xPos != 0)
 		{
 			buffer.edit(player.xPos, player.yPos, L' ');
 			player.xPos--;
 			holdL = true;
 		}
-		if (bKey[2] && !holdR && player.xPos != 79)
+		if (RIGHT && !holdR && player.xPos != 79)
 		{
 			buffer.edit(player.xPos, player.yPos, L' ');
 			player.xPos++;
 			holdR = true;
 		}
 	}
-	if (bKey[1] && !bKey[0])
+	if (LEFT && !CTRL)
 	{
 		if (player.xPos != 0)
 		{
@@ -34,7 +42,7 @@ void::Game::getInput(Buffer buffer, int tickCounter)
 			player.xPos--;
 		}
 	}
-	if(bKey[2] && !bKey[0])
+	if(RIGHT && !CTRL)
 	{
 		if (player.xPos != 79)
 		{
@@ -42,13 +50,13 @@ void::Game::getInput(Buffer buffer, int tickCounter)
 			player.xPos++;
 		}
 	}
-	if (bKey[3])
+	if (SPACE)
 	{
 		if (!shootDelay)
 		{
 			shoot();
 			shootTick = tickCounter;
-			shootDelay = true;
+			//shootDelay = true;
 		}
 	}
 }
