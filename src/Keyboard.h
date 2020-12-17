@@ -3,6 +3,8 @@
 #define MAX_INPUT_KEYBOARD 10
 struct KeyboardState
 {
+	bool up{};
+	bool down{};
 	bool left{};
 	bool right{};
 	bool ctrl{};

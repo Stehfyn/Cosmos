@@ -8,6 +8,7 @@ public:
 	void setWindow();
 	void edit(int x, int y, wchar_t c);
 	void update();
+	HANDLE getHandle() { return hConsole; }
 	void del();
 	wchar_t* get(){return buffer;}
 private:
