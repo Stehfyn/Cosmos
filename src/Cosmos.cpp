@@ -7,52 +7,71 @@
 #include "Ambience.h"
 #include "Game.h"
 #include "HUD.h"
-#include "Main_Menu.h"
 #include "GameState.h"
 #include "Keyboard.h"
 #include "Gamepad.h"
-#include <process.h>
 
 #define TICK_RATE 16.67ms //60 fps
-const int ScreenWidth{ 80 }, ScreenHeight{ 30 };
- //controller 1
+#define SCREEN_WIDTH 80
+#define SCREEN_HEIGHT 30
 
+COORD cdBuffer {SCREEN_WIDTH, SCREEN_HEIGHT};
+_SMALL_RECT srWindow {0, 0, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1};
 using namespace std;
 
 int main()
 {
-	GameState MainMenu(ScreenWidth, ScreenHeight);
-	//GameState Practice(ScreenWidth, ScreenHeight);
-	//GameState Game(ScreenWidth, ScreenHeight);
+	GameState MainMenu(SCREEN_WIDTH, SCREEN_HEIGHT);
+	GameState Practice(SCREEN_WIDTH, SCREEN_HEIGHT);
+	GameState Game(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	Keyboard keyboard;
 	Gamepad gamepad(1);
-	int state{-1};
-	while (state != 4) 
+	int state{MAINMENU};
+	while (state != EXIT) 
 	{
 		switch (state)
 		{
-		case -1:
+		case MAINMENU:
 		{
-			while (state == -1)
+			MainMenu.getBuffer().setHandle();
+			while (state == MAINMENU)
 			{
 				auto start = std::chrono::high_resolution_clock::now();
+
 				state = MainMenu.mm_getInput(keyboard, gamepad);
 				MainMenu.mm_display();
-				gamepad.Update();
-				MainMenu.getBuffer().update();
+				//MoveWindow(MainMenu.getBuffer().getWnd(), 80, 30, 600, 300, false);
+
+				SetConsoleWindowInfo(MainMenu.getBuffer().getHandle(), true, &srWindow);
+				SetConsoleScreenBufferSize(MainMenu.getBuffer().getHandle(), cdBuffer);
+				
 				auto end = chrono::high_resolution_clock::now();
 				auto elapsed = chrono::duration_cast<chrono::microseconds>(start - end);
-				this_thread::sleep_for((TICK_RATE) / 2);
+				this_thread::sleep_for((TICK_RATE - elapsed) / 2);
 			}
-			//code cleanup
+			MainMenu.getBuffer().closeHandle();
 			break;
 		}
-		case 0:
+		case PRACTICE: //practice
 		{
-			Buffer buffer(ScreenWidth, ScreenHeight);
+			Practice.getBuffer().setHandle();
+			while (state == PRACTICE)
+			{
+				auto start = std::chrono::high_resolution_clock::now();
+
+
+				auto end = chrono::high_resolution_clock::now();
+				auto elapsed = chrono::duration_cast<chrono::microseconds>(start - end);
+				this_thread::sleep_for((TICK_RATE - elapsed) / 2);
+			}
+		}
+		case 10:
+		{
+			Buffer buffer(SCREEN_WIDTH, SCREEN_HEIGHT);
+			buffer.setHandle();
 			Ambience ambience{};
-			Game game{};
+			::Game game{};
 			HUD hud{};
 			//buffer.setWindow();
 			int tickCounter{};
@@ -74,7 +93,7 @@ int main()
 				//compare and calculate next frame
 				if (tickCounter % 4 == 0)
 				{
-					ambience.addStar();
+					ambience.addStar(0);
 					ambience.advanceStars(buffer);
 				}
 				if (tickCounter % 1 == 0)

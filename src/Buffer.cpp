@@ -7,7 +7,15 @@ Buffer::Buffer(int pScreenWidth, int pScreenHeight)
 	buffer = new wchar_t[width * height];
 	for (int i = 0; i < width * height; i++) { buffer[i] = ' '; }
 	hConsole = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
+	window = GetConsoleWindow();
+}
+void::Buffer::setHandle()
+{
 	SetConsoleActiveScreenBuffer(hConsole);
+}
+void::Buffer::closeHandle()
+{
+	CloseHandle(hConsole);
 }
 void::Buffer::setWindow()
 {

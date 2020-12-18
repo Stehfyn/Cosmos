@@ -10,15 +10,17 @@ void::GameState::mm_display()
 	mm_displayTitle();
 	mm_displayModes();
 	mm_displayCursor();
+	getBuffer().update();
 }
 void::GameState::mm_displayAmbience()
 {
 	if (--stateDelay.star == 0)
 	{
-		ambience.addStar();
+		ambience.addStar(2);
 		ambience.advanceStars(buffer);
 		stateDelay.star = STAR_DELAY;
 	}
+	ambience.deleteStar(27);
 	ambience.printStars(buffer);
 
 	//Top HUD line
@@ -175,46 +177,85 @@ void::GameState::mm_displayCursor()
 	else
 		buffer.edit(cursorX, cursorY, L' ');
 }
-int::GameState::mm_getInput(Keyboard keyboard, Gamepad gamepad)
+int::GameState::mm_getInput(Keyboard keyboard, Gamepad &gamepad)
 {
-	gamepad.Update();
-	if (--stateDelay.inputDelay <= 0)
-		stateDelay.input = false;
-	if (!stateDelay.input)
+	if (gamepad.Update()) //If controller is connected
 	{
-		if ((keyboard.getKeyboardState().up || gamepad.isButtonPressed(XINPUT_GAMEPAD_DPAD_UP) ||
-			gamepad.leftStickY > .80f) && selection != 0)
+		if (--stateDelay.inputDelay <= 0)
+			stateDelay.input = false;
+		if (!stateDelay.input)
 		{
-			lastSelection = selection--;
-			selectionChange = true;
+			if ((gamepad.isButtonPressed(XINPUT_GAMEPAD_DPAD_UP) ||
+				gamepad.leftStickY > .80f) && selection != 0)
+			{
+				lastSelection = selection--;
+				selectionChange = true;
+			}
+			else if (( gamepad.isButtonPressed(XINPUT_GAMEPAD_DPAD_DOWN) ||
+				gamepad.leftStickY < -.80f) && selection != 4)
+			{
+				lastSelection = selection++;
+				selectionChange = true;
+			}
+			else if (( gamepad.isButtonPressed(XINPUT_GAMEPAD_DPAD_UP) ||
+				gamepad.leftStickY > .80f) && selection == 0)
+			{
+				lastSelection = selection;
+				selection = 4;
+				selectionChange = true;
+			}
+			else if ((gamepad.isButtonPressed(XINPUT_GAMEPAD_DPAD_DOWN) ||
+				gamepad.leftStickY < -.80f) && selection == 4)
+			{
+				lastSelection = selection;
+				selection = 0;
+				selectionChange = true;
+			}
+			else if (gamepad.isButtonPressed(XINPUT_GAMEPAD_A))
+			{
+				return selection;
+			}
+			stateDelay.input = true;
+			stateDelay.inputDelay = INPUT_DELAY;
+			return -1;
 		}
-		else if ((keyboard.getKeyboardState().down || gamepad.isButtonPressed(XINPUT_GAMEPAD_DPAD_DOWN) ||
-			gamepad.leftStickY < -.80f) && selection != 4)
+	}
+	else //If no controller, then Keyboard
+	{
+		if (--stateDelay.inputDelay <= 0)
+			stateDelay.input = false;
+		if (!stateDelay.input)
 		{
-			lastSelection = selection++;
-			selectionChange = true;
+			if (keyboard.getKeyboardState().up && selection != 0)
+			{
+				lastSelection = selection--;
+				selectionChange = true;
+			}
+			else if (keyboard.getKeyboardState().down && selection != 4)
+			{
+				lastSelection = selection++;
+				selectionChange = true;
+			}
+			else if (keyboard.getKeyboardState().up && selection == 0)
+			{
+				lastSelection = selection;
+				selection = 4;
+				selectionChange = true;
+			}
+			else if (keyboard.getKeyboardState().down && selection == 4)
+			{
+				lastSelection = selection;
+				selection = 0;
+				selectionChange = true;
+			}
+			else if (keyboard.getKeyboardState().enter && selection == 0)
+			{
+				return selection;
+			}
+			stateDelay.input = true;
+			stateDelay.inputDelay = INPUT_DELAY;
+			return -1;
 		}
-		else if ((keyboard.getKeyboardState().up || gamepad.isButtonPressed(XINPUT_GAMEPAD_DPAD_UP) ||
-			gamepad.leftStickY > .80f) && selection == 0)
-		{
-			lastSelection = selection;
-			selection = 4;
-			selectionChange = true;
-		}
-		else if ((keyboard.getKeyboardState().down || gamepad.isButtonPressed(XINPUT_GAMEPAD_DPAD_DOWN) ||
-			gamepad.leftStickY < -.80f) && selection == 4)
-		{
-			lastSelection = selection;
-			selection = 0;
-			selectionChange = true;
-		}
-		else if (keyboard.getKeyboardState().enter || gamepad.isButtonPressed(XINPUT_GAMEPAD_A))
-		{
-			return selection;
-		}
-		stateDelay.input = true;
-		stateDelay.inputDelay = INPUT_DELAY;
-		return -1;
 	}
 	return -1;
 }

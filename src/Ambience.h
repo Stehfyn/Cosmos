@@ -4,8 +4,7 @@
 class Ambience
 {
 public:
-	void initRand();
-	void addStar();
+	void addStar(int);
 	void advanceStars(Buffer);
 	void printStars(Buffer);
 	void deleteStar(int);

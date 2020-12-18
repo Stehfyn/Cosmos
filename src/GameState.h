@@ -4,10 +4,7 @@
 #include "MainMenu.h"
 #include "Keyboard.h"
 #include "Gamepad.h"
-#define MAX_DELAY_NUM 10
-#define STAR_DELAY 3
-#define CURSOR_DELAY 30
-#define INPUT_DELAY 7
+
 class GameState
 {
 public:
@@ -21,7 +18,7 @@ public:
 	void mm_displayTitle();
 	void mm_displayModes();
 	void mm_displayCursor();
-	int mm_getInput(Keyboard, Gamepad);
+	int mm_getInput(Keyboard, Gamepad&);
 
 private:
 	Buffer buffer;
@@ -31,6 +28,7 @@ private:
 	int lastSelection{};
 	bool selectionChange{};
 	bool cursorVis{};
+
 	struct delay
 	{
 		int star{ STAR_DELAY };
